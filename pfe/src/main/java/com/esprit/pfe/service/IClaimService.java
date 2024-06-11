@@ -19,4 +19,5 @@ public interface IClaimService {
     Claim updateContentClaim(long id, claimRequest claimRequest);
 
     Claim updateStatusClaim(long id, claimRequest claimRequest) throws MessagingException;
+
 }

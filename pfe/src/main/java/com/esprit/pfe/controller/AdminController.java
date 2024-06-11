@@ -3,6 +3,7 @@ package com.esprit.pfe.controller;
 import com.esprit.pfe.DTO.*;
 import com.esprit.pfe.entity.Admin;
 import com.esprit.pfe.service.AdminService;
+import com.esprit.pfe.service.claimStatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessagingException;
@@ -18,6 +19,15 @@ import java.util.Optional;
 public class AdminController {
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    private claimStatService service;
+
+    @GetMapping("/stat-claim")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public List<Object> getUserStatistics() {
+        return service.getReclamationStat();
+    }
 
     @PostMapping("/adminadd")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
