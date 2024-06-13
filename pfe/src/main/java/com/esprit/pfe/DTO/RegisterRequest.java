@@ -1,6 +1,9 @@
 package com.esprit.pfe.DTO;
 
 import com.esprit.pfe.entity.Role;
+import com.esprit.pfe.entity.nameMinister;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +19,7 @@ public class RegisterRequest {
     private String password ;
     private Role role;
     private Boolean enable;
+    @Enumerated(EnumType.STRING)
+    private nameMinister name;
 
 }

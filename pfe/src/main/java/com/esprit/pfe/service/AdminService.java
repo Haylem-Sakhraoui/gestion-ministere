@@ -3,8 +3,10 @@ package com.esprit.pfe.service;
 import com.esprit.pfe.DTO.*;
 import com.esprit.pfe.config.JwtService;
 import com.esprit.pfe.entity.Admin;
+import com.esprit.pfe.entity.Minister;
 import com.esprit.pfe.entity.Token;
 import com.esprit.pfe.repository.AdminRepository;
+import com.esprit.pfe.repository.MinisterRepository;
 import com.esprit.pfe.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class AdminService implements IAdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private MinisterRepository ministerRepository;
     @Autowired
     private TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -60,13 +64,19 @@ public class AdminService implements IAdminService {
 
         adminRepository.save(admin);
 
+        Minister minister = Minister.builder()
+                .name(request.getName())
+                .admin(admin) // Associate the Minister with the Admin
+                .build();
+        ministerRepository.save(minister);
+
         var jwtToken = jwtService.generateToken(new HashMap<>(),admin);
 
         // Send an email to the user with the password
         String subject = "Welcome ";
         String body = "Dear admin " + admin.getEmail() + ",\n\n"
                 + "Welcome to our new platform! Your account has been successfully created.\n\n"
-                + "Your temporary password is: " + generatedPassword + "\n\n"
+                + "Your temporary password is:\n <h2>" + generatedPassword + " </h2>\n\n"
                 + "For security reasons, we recommend changing your password after logging in.\n\n"
                 + "Thank you for joining us!";
         Mail mail = new Mail(admin.getEmail(), subject, body);
